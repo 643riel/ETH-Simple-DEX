@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SimpleDEX</title>
+  <link rel="stylesheet" href="styles - dark.css">
+</head>
+<body>
+  <h1>SimpleDEX Frontend</h1>
+
+  <section>
+    <h2>Agregar Liquidez</h2>
+    <label for="liquidity-add-amountA">Cantidad Token A:</label>
+    <input type="number" id="liquidity-add-amountA" placeholder="0.0" min="0">
+    <label for="liquidity-add-amountB">Cantidad Token B:</label>
+    <input type="number" id="liquidity-add-amountB" placeholder="0.0" min="0">
+    <button id="add-liquidity">Agregar Liquidez</button>
+    <p id="add-liquidity-output" class="output-message"></p>
+  </section>
+
+  <section>
+    <h2>Remover Liquidez</h2>
+    <label for="liquidity-remove-amountA">Cantidad Token A:</label>
+    <input type="number" id="liquidity-remove-amountA" placeholder="0.0" min="0">
+    <label for="liquidity-remove-amountB">Cantidad Token B:</label>
+    <input type="number" id="liquidity-remove-amountB" placeholder="0.0" min="0">
+    <button id="remove-liquidity">Remover Liquidez</button>
+    <p id="remove-liquidity-output" class="output-message"></p>
+  </section>
+
+  <section>
+    <h2>Intercambiar Tokens</h2>
+    <label for="swap-amountA">Cantidad Token A:</label>
+    <input type="number" id="swap-amountA" placeholder="0.0" min="0">
+    <button id="swap-a-for-b">Intercambiar A por B</button>
+    <label for="swap-amountB">Cantidad Token B:</label>
+    <input type="number" id="swap-amountB" placeholder="0.0" min="0">
+    <button id="swap-b-for-a">Intercambiar B por A</button>
+    <p id="swap-output" class="output-message"></p>
+  </section>
+
+  <section>
+    <h2>Consultar Precio</h2>
+    <label for="price-token">Dirección del token:</label>
+    <input type="text" id="price-token" placeholder="0x...">
+    <button id="get-price">Obtener Precio</button>
+    <p id="price-output" class="output-message"></p>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+<!-- Click derecho sobre este archivo -> Open with Live Server.
+En el mavegador: http://localhost:5500/frontend/ -->

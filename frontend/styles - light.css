@@ -1,0 +1,119 @@
+/* General */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Header */
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  color: #0078d4;
+  text-shadow: 2px 2px 5px rgba(0, 120, 212, 0.5);
+}
+
+/* Secciones */
+section {
+  background: rgba(255, 255, 255, 0.95);
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+section h2 {
+  color: #0078d4;
+  border-bottom: 2px solid #0078d4;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 3px rgba(0, 120, 212, 0.5);
+}
+
+/* Formularios */
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+input[type="text"] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus {
+  background-color: #f0f8ff;
+  box-shadow: 0 0 5px #0078d4;
+}
+
+/* Botones */
+button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: linear-gradient(45deg, #0078d4, #005bb5);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 120, 212, 0.4);
+}
+
+button:hover {
+  background: linear-gradient(45deg, #005bb5, #0078d4);
+  transform: translateY(-2px);
+}
+
+button:active {
+  background: linear-gradient(45deg, #0078d4, #005bb5);
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px rgba(0, 120, 212, 0.4);
+}
+
+/* Mensajes */
+p {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+p#add-liquidity-output,
+p#remove-liquidity-output,
+p#swap-output,
+p#price-output {
+  font-weight: bold;
+  color: #0078d4;
+  text-shadow: 1px 1px 3px rgba(0, 120, 212, 0.5);
+}
+
+/* Adaptabilidad */
+@media (max-width: 600px) {
+  section {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+  }
+}

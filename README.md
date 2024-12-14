@@ -4,12 +4,12 @@
 
 ### Requisitos previos
 
-Asegúrate de tener **Node.js** instalado en tu sistema. 
-Si no lo tienes, puedes descargarlo desde [https://nodejs.org/en](https://nodejs.org/en).
+Aseguráte de tener **Node.js** instalado en tu sistema. 
+Si no lo tenés, puedes descargarlo desde [https://nodejs.org/en](https://nodejs.org/en).
 
 ### Clonar el repositorio
 
-Si aún no has clonado el repositorio, ejecuta el siguiente comando en tu terminal:
+Si aún no clonaste el repositorio, ejecutá el siguiente comando en tu terminal:
 
 ```bash
 git clone <URL_del_repositorio>
@@ -18,7 +18,7 @@ cd /mnt/<letra disco>/<directorio>
 
 ### Instalar dependencias
 
-Ejecuta los siguientes comandos para instalar las dependencias necesarias:
+Ejecutá los siguientes comandos para instalar las dependencias necesarias:
 
 ```bash
 npm install --save-dev @nomicfoundation/hardhat-toolbox@^5.0.0 --verbose
@@ -33,7 +33,7 @@ npm install ethers@^6.13.4 --verbose
 
 ### Abrir el proyecto en VSCode (opcional)
 
-Si usas Visual Studio Code, puedes abrir el proyecto ejecutando:
+Si usás Visual Studio Code, podés abrir el proyecto ejecutando:
 
 ```bash
 code .
@@ -62,22 +62,22 @@ localhost: {
 
 ### Levantar el nodo local de Hardhat
 
-Para iniciar el nodo local de Hardhat, ejecuta el siguiente comando:
+Para iniciar el nodo local de Hardhat, ejecutá el siguiente comando:
 
 ```bash
 npx hardhat node
 ```
 
-Esto levantará una red de pruebas en `http://127.0.0.1:8545`.
+Esto levanta una red de pruebas en `http://127.0.0.1:8545`.
 
 ## Despliegue de contratos
 
 Los contratos se desplegarán automáticamente al iniciar el nodo local. 
-Si deseas verificar el estado del despliegue, revisa la salida en la terminal.
+Si deseas verificar el estado del despliegue, revisá la salida en la terminal.
 
 ### Salida esperada del despliegue
 
-Después de desplegar los contratos, deberías ver una salida similar a la siguiente:
+Después de desplegar los contratos, deberías ver una salida como la siguiente:
 
 ```plaintext
 deploying "TokenA" (tx: 0x3dd50c174abf10249fb712a7b2f5b9f007e0b3...)
@@ -95,4 +95,4 @@ Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/
 
 ## Documentación adicional
 
-Para más información, consulta el manual incluido en el repositorio. El archivo PDF se encuentra disponible dentro del proyecto.
+Para más información, consultá el manual incluido en el repositorio. El archivo PDF está disponible dentro del proyecto.

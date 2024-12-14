@@ -18,7 +18,7 @@ const config: HardhatUserConfig = {
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [], // Usa la cuenta privada definida en .env
     },
     hardhat: {
-      chainId: 1337, // Configuración por defecto de Hardhat
+      chainId: 31337, // Configuración por defecto de Hardhat
     },
     localhost: {
       url: "http://127.0.0.1:8545", // URL de la red local
@@ -29,7 +29,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      sepolia: ETHERSCAN_API, // API Key para verificar contratos en Etherscan (Sepolia)
+      sepolia: ETHERSCAN_API, // API Key para verificar contratos en Etherscan (Sepolia), definida en el .env
     },
   },
   paths: {

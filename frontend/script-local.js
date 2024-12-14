@@ -1,8 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Configurar el proveedor para conectarse al nodo de Hardhat
+  const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
+
+  // Clave privada de la cuenta de Hardhat (cuenta #0 por defecto)
+  const privateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+
+  // Crear la billetera con la clave privada y conectarla al proveedor
+  const wallet = new ethers.Wallet(privateKey, provider);
+
   // Inicializar variables para los contratos
   let dexContract, tokenA, tokenB;
+
+  // Variables para manejar la conexión
   let isWalletConnected = false;
-  let signer;
 
   // Actualizar estado de conexión en la UI
   function updateWalletStatus(message, isSuccess) {
@@ -11,56 +21,25 @@ document.addEventListener("DOMContentLoaded", function () {
     walletStatus.style.color = isSuccess ? "green" : "red";
   }
 
-  // Función para conectarse a Metamask
-  async function connectMetamaskWallet() {
+  // Función principal para conectar la billetera y configurar los contratos
+  async function connectHardhatWallet() {
     try {
-      if (!window.ethereum) {
-        alert("Metamask no está instalado.");
-        return;
-      }
-  
-      // Solicitar acceso a la cuenta
-      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      signer = provider.getSigner();
-      const walletAddress = await signer.getAddress();
-
-      console.log("Cuenta conectada:", walletAddress);
+      console.log("Cuenta conectada:", wallet.address);
       isWalletConnected = true;
-      updateWalletStatus(`Billetera conectada: ${walletAddress}`, true);
+      updateWalletStatus(`Billetera conectada: ${wallet.address}`, true);
 
       // Detectar la red actual
       const network = await provider.getNetwork();
-      if (network.chainId !== 43981) {  // 0xAA36A7 es 43981 en decimal (Scroll Sepolia)
-        // Intentar cambiar a Scroll Sepolia automáticamente
-        try {
-          await ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0xAA36A7" }], // 0xAA36A7 es 43981 en hexadecimal
-          });
-          alert("Se cambió automáticamente a la red Scroll Sepolia.");
-        } catch (switchError) {
-          // Si la red no está configurada, mostrar un mensaje
-          if (switchError.code === 4902) {
-            alert("Scroll Sepolia no está configurada en Metamask. Por favor agrégala manualmente.");
-          } else {
-            throw switchError;
-          }
-          updateWalletStatus("Red incorrecta. Cambia a Scroll Sepolia.", false);
-          return;
-        }
-      }
-  
       console.log("Red detectada:", network.name);
-  
-      // Cargar las direcciones de contrato
-      const contractAddresses = getContractAddresses(43981); // Scroll Sepolia
+
+      // Cargar las direcciones de contrato según la red
+      const contractAddresses = getContractAddresses(network.chainId);
       console.log("Direcciones de contratos cargadas:", contractAddresses);
-  
+
       // Inicializar los contratos
-      initContracts(signer, contractAddresses);
+      initContracts(wallet, contractAddresses);
     } catch (error) {
-      console.error("Error al conectar la billetera Metamask:", error);
+      console.error("Error al conectar la billetera Hardhat:", error);
       updateWalletStatus("Error al conectar la billetera.", false);
     }
   }
@@ -72,13 +51,13 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Billetera desconectada.");
   }
 
-  // Direcciones de los contratos para la red Scroll Sepolia
+  // Cargar las direcciones de los contratos por red
   function getContractAddresses(chainId) {
     const addresses = {
-      43981: { // Scroll Sepolia
-        dex: "0x5a5d8ebcedee9cb88f2a00151e6c723a062c6e27",
-        tokenA: "0xe652b0f103561052cdd0B143c0171eCbb6b0e683",
-        tokenB: "0xbD997ab4c6B41f82ef996079940a73da5C32f520",
+      31337: { // Hardhat localhost
+        dex: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+        tokenA: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        tokenB: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       },
     };
 
@@ -86,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Inicializar contratos con el signer y las direcciones
-  function initContracts(signer, addresses) {
+  function initContracts(wallet, addresses) {
     const DEX_ABI = [
       "function addLiquidity(uint256 amountA, uint256 amountB) external",
       "function removeLiquidity(uint256 amountA, uint256 amountB) external",
@@ -97,17 +76,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const TOKEN_ABI = ["function approve(address spender, uint256 amount) public returns (bool)"];
 
-    dexContract = new ethers.Contract(addresses.dex, DEX_ABI, signer);
-    tokenA = new ethers.Contract(addresses.tokenA, TOKEN_ABI, signer);
-    tokenB = new ethers.Contract(addresses.tokenB, TOKEN_ABI, signer);
+    dexContract = new ethers.Contract(addresses.dex, DEX_ABI, wallet);
+    tokenA = new ethers.Contract(addresses.tokenA, TOKEN_ABI, wallet);
+    tokenB = new ethers.Contract(addresses.tokenB, TOKEN_ABI, wallet);
 
-    console.log("Contratos inicializados con la billetera Metamask.");
+    console.log("Contratos inicializados con la billetera Hardhat.");
   }
 
   // Conectar y desconectar billetera con los botones
   document.getElementById("connect-wallet").addEventListener("click", () => {
     if (!isWalletConnected) {
-      connectMetamaskWallet();
+      connectHardhatWallet();
     } else {
       alert("La billetera ya está conectada.");
     }
@@ -121,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Funciones de validación y lógica (igual que en el script original)
+  // Función para validar la entrada del usuario
   function validateAmount(amount) {
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
       alert("Por favor, ingrese un valor válido (número positivo).");
@@ -130,19 +109,32 @@ document.addEventListener("DOMContentLoaded", function () {
     return true;
   }
 
+  // Función para aprobar tokens con manejo de errores detallado
   async function approveTokens(token, amount) {
     try {
-      const parsedAmount = ethers.utils.parseUnits(amount.toString(), 18);
+      const parsedAmount = ethers.utils.parseUnits(amount.toString(), 18); // Manejo de decimales
       const tx = await token.approve(dexContract.address, parsedAmount);
       await tx.wait();
       console.log(`Tokens aprobados: ${amount}`);
       return true;
     } catch (error) {
-      console.error("Error al aprobar tokens:", error);
+      handleApprovalError(error);
       return false;
     }
   }
 
+  // Función para manejar errores de aprobación
+  function handleApprovalError(error) {
+    if (error.code === "INSUFFICIENT_FUNDS") {
+      console.error("Fondos insuficientes para aprobar tokens.");
+    } else if (error.code === "NETWORK_ERROR") {
+      console.error("Error de red al aprobar tokens.");
+    } else {
+      console.error("Error desconocido al aprobar tokens:", error);
+    }
+  }
+
+  // Reutilización para manejar aprobaciones y validación
   async function handleApprove(buttonId, inputId, token, outputId) {
     const amount = document.getElementById(inputId).value;
     const output = document.getElementById(outputId);
@@ -171,8 +163,6 @@ document.addEventListener("DOMContentLoaded", function () {
     handleApprove("approve-b", "approve-amountB", tokenB, "approve-b-output");
   });
 
-  // --------------------------------------------
- 
   // Agregar liquidez
   document.getElementById("add-liquidity").addEventListener("click", async () => {
     const amountA = document.getElementById("liquidity-add-amountA").value;
@@ -190,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   });
-
+  
   // Remover liquidez
   document.getElementById("remove-liquidity").addEventListener("click", async () => {
     const amountA = document.getElementById("liquidity-remove-amountA").value;
@@ -216,10 +206,10 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const tx = await dexContract.swapAforB(amountAIn);
         await tx.wait();
-        document.getElementById("swap-output").innerText = `Intercambio realizado: ${amountAIn} Token A por Token B.`;
+        document.getElementById("swap-output").innerText = "Intercambio A por B exitoso.";
       } catch (error) {
-        console.error("Error al intercambiar tokens:", error);
-        document.getElementById("swap-output").innerText = "Error al intercambiar tokens.";
+        console.error("Error al intercambiar A por B:", error);
+        document.getElementById("swap-output").innerText = "Error al intercambiar A por B.";
       }
     }
   });
@@ -232,11 +222,25 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const tx = await dexContract.swapBforA(amountBIn);
         await tx.wait();
-        document.getElementById("swap-output").innerText = `Intercambio realizado: ${amountBIn} Token B por Token A.`;
+        document.getElementById("swap-output").innerText = "Intercambio B por A exitoso.";
       } catch (error) {
-        console.error("Error al intercambiar tokens:", error);
-        document.getElementById("swap-output").innerText = "Error al intercambiar tokens.";
+        console.error("Error al intercambiar B por A:", error);
+        document.getElementById("swap-output").innerText = "Error al intercambiar B por A.";
       }
+    }
+  });
+
+  // Obtener precio
+  document.getElementById("get-price").addEventListener("click", async () => {
+    const tokenAddress = document.getElementById("price-token").value;
+
+    try {
+      const price = await dexContract.getPrice(tokenAddress);
+      const formattedPrice = ethers.utils.formatEther(price);
+      document.getElementById("price-output").innerText = `Precio: ${formattedPrice}`;
+    } catch (error) {
+      console.error("Error al obtener el precio:", error);
+      document.getElementById("price-output").innerText = "Error al obtener el precio.";
     }
   });
 });
